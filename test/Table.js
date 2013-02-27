@@ -6,7 +6,6 @@ describe('Table', function() {
         it('does not start game until full', function() {
             var table = new Table()
             , current = {
-                state: 'waiting',
                 rules: { spots: 2 },
                 spots: [{ user: "2" }]
             }
@@ -17,7 +16,6 @@ describe('Table', function() {
         it('starts game when full', function() {
             var table = new Table()
             , current = {
-                state: 'waiting',
                 rules: { spots: 2 },
                 spots: [{ user: "2" }, { user: "3" }]
             }
