@@ -47,4 +47,22 @@ describe('Table', function() {
             expect(result.spots[1].dealt.length).to.be(5)
         })
     })
+
+    describe('processSpotPendingCommitted', function() {
+        it('commits', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    pending_committed: [
+                        { hand: 0, card: 12 },
+                        { hand: 1, card: 28 }
+                    ]
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            expect(result.spots[0].committed[0].hand).to.be(0)
+            expect(result.spots[0].committed[1].card).to.be(28)
+            expect(result.spots[0].pending_committed).to.not.be.ok()
+        })
+    })
 })
