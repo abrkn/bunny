@@ -52,20 +52,123 @@ describe('Table', function() {
     })
 
     describe('processSpotPendingCommitted', function() {
-        it('commits', function() {
+        it('refuses too few commmitted', function() {
             var table = new Table()
             , current = {
                 spots: [{
+                    dealt: [1, 2, 3, 4, 5],
                     pending_committed: [
-                        { hand: 0, card: 12 },
-                        { hand: 1, card: 28 }
+                        { hand: 0, card: 1 },
+                        { hand: 0, card: 2 },
+                        { hand: 0, card: 3 },
+                        { hand: 0, card: 4 }
                     ]
                 }]
             }
             , result = table.processSpotPendingCommitted(0, current)
-            expect(result.spots[0].committed[0].hand).to.be(0)
-            expect(result.spots[0].committed[1].card).to.be(28)
-            expect(result.spots[0].pending_committed).to.not.be.ok()
+            , spot = current.spots[0]
+            expect(spot.pending_committed).to.be(null)
+            expect(spot.committed).to.not.be.ok()
+        })
+
+        it('refuses too many commmitted', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [1, 2, 3, 4, 5],
+                    pending_committed: [
+                        { hand: 0, card: 1 },
+                        { hand: 0, card: 2 },
+                        { hand: 0, card: 3 },
+                        { hand: 0, card: 4 },
+                        { hand: 0, card: 5 },
+                        { hand: 0, card: 6 }
+                    ]
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            , spot = current.spots[0]
+            expect(spot.pending_committed).to.be(null)
+            expect(spot.committed).to.not.be.ok()
+        })
+
+        it('refuses undealt card commmitted', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [1, 2, 3, 4, 6],
+                    pending_committed: [
+                        { hand: 0, card: 1 },
+                        { hand: 0, card: 2 },
+                        { hand: 0, card: 3 },
+                        { hand: 0, card: 4 },
+                        { hand: 0, card: 5 }
+                    ]
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            , spot = current.spots[0]
+            expect(spot.pending_committed).to.be(null)
+            expect(spot.committed).to.not.be.ok()
+        })
+
+        it('refuses over filling back hand', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [6],
+                    hands: [
+                        [1, 2, 3, 4, 5]
+                    ],
+                    pending_committed: [
+                        { hand: 0, card: 6 }
+                    ]
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            , spot = current.spots[0]
+            expect(spot.pending_committed).to.be(null)
+            expect(spot.committed).to.not.be.ok()
+        })
+
+        it('accepts correct commit initial deal', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [1, 2, 3, 4, 5],
+                    pending_committed: [
+                        { hand: 0, card: 1 },
+                        { hand: 0, card: 2 },
+                        { hand: 0, card: 3 },
+                        { hand: 0, card: 4 },
+                        { hand: 0, card: 5 }
+                    ]
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            , spot = current.spots[0]
+            expect(spot.pending_committed).to.be(null)
+            expect(spot.committed).to.be.ok()
+        })
+
+        it('adds to existing hand', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [6],
+                    hands: [
+                        [1, 2, 3, 4, 5],
+                        []
+                    ],
+                    pending_committed: [
+                        { hand: 1, card: 6 }
+                    ]
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            , spot = current.spots[0]
+            expect(spot.pending_committed).to.be(null)
+            expect(spot.committed).to.be.ok()
         })
     })
 
