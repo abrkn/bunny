@@ -22,18 +22,21 @@
         // with four players, the round has four rounds
         "game": 1,
 
-        // which spot index is the dealer this round, also known as the dealer button
-        // the dealer is the last person around the table to act (big advantage)
+        // which spot index is the dealer this round, also known as the dealer
+        // button the dealer is the last person around the table to act,
+        // which is a big advantage
         "button": 0,
 
         // the turn (also known as the player we're waiting to act) is null
-        // when the initial five cards are dealt, because every player is on turn.
-        // for the remainder of the game, the turn is index of the spot currently on turn
+        // when the initial five cards are dealt,
+        // because every player is on turn. for the remainder of the game,
+        // the turn is index of the spot currently on turn
         "turn": 0,
 
         // players are seated in spots
         "spots": [{
-            // user id of player, if any, occupying the spot. these are always strings
+            // user id of player, if any, occupying the spot.
+            // these are always strings
             "user": "2",
 
             // points won/lost in the last game. losses are negative
@@ -49,9 +52,9 @@
             "dealt": [1, 9, 12, 40, 28],
 
             // the user will set this with his desired card placements
-            // the back-end will read this value and either accept it or deny it
-            // think of this as a work queue where the user is the producer and the
-            // back end is the consumer
+            // the back-end will read this value and either
+            // accept it or deny it think of this as a work queue where
+            // the user is the producer and the back end is the consumer
             "pending_committed": [{
                 "card": 12,
                 "hand": 1
@@ -59,8 +62,8 @@
 
             // cards that the player has committed to place in back/mid/front
             // but are not shown to the other players because they are
-            // still setting theirs. this is necessary for the initial five cards
-            // dealt to each player
+            // still setting theirs. this is necessary for the initial five
+            // cards dealt to each player
             "committed": [{
                 "card": 19,
                 // back
