@@ -1,5 +1,5 @@
 var expect = require('expect.js')
-, Table = require('../lib/Table')
+, Table = require('../../lib/server/Table')
 
 describe('Table', function() {
     describe('processSpotUser', function() {
@@ -16,6 +16,7 @@ describe('Table', function() {
         it('starts game when full', function() {
             var table = new Table()
             , current = {
+                state: 'dead',
                 rules: { spots: 2 },
                 spots: [{ user: "2" }, { user: "3" }]
             }
@@ -45,6 +46,8 @@ describe('Table', function() {
             expect(result.deck.length).to.be(52 - 5 * 2)
             expect(result.spots[0].dealt.length).to.be(5)
             expect(result.spots[1].dealt.length).to.be(5)
+            expect(result.game).to.be(1)
+            expect(result.button).to.be.a('number')
         })
     })
 
@@ -71,38 +74,73 @@ describe('Table', function() {
             var table = new Table()
             , current = {
                 spots: [{
+                    dealt: [],
                     committed: []
                 }, {
-
+                    dealt: []
                 }]
             }
             , result = table.processSpotCommitted(0, current)
             expect(result).to.be(undefined)
         })
 
-        it('sets turn to zero when there was no turn', function() {
+        it('places cards in new hands', function() {
             var table = new Table()
             , current = {
                 spots: [{
-                    committed: []
+                    committed: [
+                        { card: 15, hand: 0 },
+                        { card: 20, hand: 1 }
+                    ]
                 }]
             }
             , result = table.processSpotCommitted(0, current)
-            expect(result.turn).to.be(0)
+            expect(result.spots[0].committed).to.be(null)
+            expect(result.spots[0].hands[0][0]).to.be(15)
+            expect(result.spots[0].hands[1][0]).to.be(20)
         })
 
-        it('passes turn when it existed', function() {
+        it('places cards in existing hands', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    committed: [
+                        { card: 15, hand: 0 },
+                        { card: 20, hand: 1 }
+                    ],
+                    hands: [[1, 2]]
+                }]
+            }
+            , result = table.processSpotCommitted(0, current)
+            expect(result.spots[0].committed).to.be(null)
+            expect(result.spots[0].hands[0][2]).to.be(15)
+        })
+    })
+
+    describe('processSpotHands', function() {
+        it('passes turn unless showdown', function() {
             var table = new Table()
             , current = {
                 turn: 0,
+                spots: [{}, {}]
+            }
+            , result = table.processSpotHands(0, current)
+            expect(result.turn).to.be(1)
+        })
+
+        it('enters finished state on showdown', function() {
+            var table = new Table()
+            , current = {
                 spots: [{
-                    committed: []
-                }, {
-                    committed: []
+                    hands: [
+                        [1, 2, 3, 4, 5],
+                        [6, 7, 8, 9, 10],
+                        [11, 12, 13]
+                    ]
                 }]
             }
-            , result = table.processSpotCommitted(0, current)
-            expect(result.turn).to.be(1)
+            , result = table.processSpotHands(0, current)
+            expect(result.state).to.be('finished')
         })
     })
 })

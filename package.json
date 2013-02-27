@@ -1,0 +1,17 @@
+{
+    "name": "bunny",
+    "version": "0.0.1",
+    "dependencies": {
+        "debug": "0.7.2",
+        "sassets": "1.0.3",
+        "underscore": "1.4.4",
+        "faye-websocket": "0.4.4",
+        "firebase-token-generator": "0.1.2",
+        "async": "0.2.5"
+    },
+    "main": "./bin/inded",
+    "devDependencies": {
+        "mocha": "1.8.1",
+        "expect.js": "0.2.0"
+    }
+}

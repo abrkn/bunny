@@ -1,0 +1,70 @@
+#app {
+    zoom: 100%;
+    &:not(.logged-in) {
+            #auth .logged-in { display: none; }
+            button.sit { display: none; }
+    }
+    &.logged-in {
+            #auth .not-logged-in { display: none; }
+    }
+
+        .spots {
+        }
+
+    .spot {
+        float: left;
+            margin-bottom: 25px;
+            margin-right: 50px;
+
+            .button { color: red; font-weight: bold; }
+            &:not(.is-dealer) .button { display: none; }
+
+            button.done { display: none; }
+        &.is-mine {
+            &.is-placing:not(.has-unplaced) {
+                            button.done { display: block; }
+        }
+            }
+
+            float: left;
+        }
+
+    .slot {
+            float: left;
+            padding: 2px 2px 2px 2px;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            border: dashed 1px black;
+            width: 44px;
+            height: 62px;
+
+            &.is-taken { border-color: red; }
+        }
+
+        .hands {
+            .hand {
+                clear: both;
+            }
+        }
+
+    .dealt {
+            .card { margin: 6px; float: left; }
+    }
+
+    .card {
+        width: 42px;
+        height: 62px;
+        overflow: hidden;
+        position: relative;
+
+            &.is-uncommitted { background-color: yellow; }
+
+       img {
+            max-width: none;
+           position: absolute;
+                width: 810px;
+                height: 290px;
+                pointer-events: none;
+    }
+}
+}
