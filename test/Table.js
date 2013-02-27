@@ -65,4 +65,44 @@ describe('Table', function() {
             expect(result.spots[0].pending_committed).to.not.be.ok()
         })
     })
+
+    describe('processSpotCommitted', function() {
+        it('does nothing when some spots are uncommitted', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    committed: []
+                }, {
+
+                }]
+            }
+            , result = table.processSpotCommitted(0, current)
+            expect(result).to.be(undefined)
+        })
+
+        it('sets turn to zero when there was no turn', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    committed: []
+                }]
+            }
+            , result = table.processSpotCommitted(0, current)
+            expect(result.turn).to.be(0)
+        })
+
+        it('passes turn when it existed', function() {
+            var table = new Table()
+            , current = {
+                turn: 0,
+                spots: [{
+                    committed: []
+                }, {
+                    committed: []
+                }]
+            }
+            , result = table.processSpotCommitted(0, current)
+            expect(result.turn).to.be(1)
+        })
+    })
 })
