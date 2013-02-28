@@ -8,7 +8,11 @@
         "faye-websocket": "0.4.4",
         "firebase-token-generator": "0.1.2",
         "async": "0.2.5",
-        "ofcp": "0.0.6"
+        "ofcp": "0.0.6",
+        "jake": "0.5.8",
+        "aws2js": "0.8.1",
+        "shelljs": "0.1.2",
+        "less": "x"
     },
     "scripts": {
         "test": "mocha",
@@ -20,5 +24,9 @@
     "devDependencies": {
         "mocha": "1.8.1",
         "expect.js": "0.2.0"
-    }
+    },
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.2.x"
+  }
 }
