@@ -1,0 +1,105 @@
+{
+  "rules": {
+    "users": {
+      "$user": {
+        "dev": {
+          ".validate": "newData.val() == true"
+        }
+      }
+    },
+    "tables": {
+      "$table": {
+        // state of the game. may be redundant
+        "state": {
+          ".read": true,
+          ".validate": "newData.val() == 'playing' || newData.val() == 'dead' || newData.val() == 'finished'"
+        },
+        // player who is dealing (last to act)
+        "button": {
+          ".read": true
+        },
+        // player currently on turn (next to act)
+        "turn": {
+          ".read": true,
+        },        "rules": {
+          ".read": true
+        },
+        // cards that have not been dealt
+        "deck": {
+        },
+        "spots": {
+          "$spot": {
+            // face up hands
+            "hands": {
+              ".read": true
+            },
+            // score for the previous game. only set in playing state
+            "game_score": {
+              ".read": true
+            },
+            // score for the entire round (every game)
+            "round_score": {
+              ".read": true
+            },
+            // cards the player have submitted to be included into his hands
+            // but are being hidden from the other players until they set
+            // their hands. this is only meaningful in the initial deal
+            "committed": {
+              // users may only read their own committed cards
+              ".read": "auth.id != null && root.child('tables/' + $table + '/spots/' + $spot + '/user').val() == auth.id"
+            },
+            "user": {
+              ".read": true,
+              // can only set to its own user
+              // this might be replaced with some pending_user or user queue
+              ".write": "
+                auth.id != null &&
+                newData.val() == auth.id &&
+                (
+                  root.child('users/' + auth.id + '/dev').val() == true ||
+                  (
+                    // the player is not already seated at this player. unless the backend starts
+                    // to handle seating of players, i'm not sure how to do this elegantly
+                    auth.id != root.child('tables/' + $table + '/spots/0/user').val() &&
+                    auth.id != root.child('tables/' + $table + '/spots/1/user').val() &&
+                    auth.id != root.child('tables/' + $table + '/spots/2/user').val() &&
+                    auth.id != root.child('tables/' + $table + '/spots/3/user').val()
+                  )
+                )
+              ",
+              // can only change user of a spot when the game is not in progress (dead)
+              ".validate": "root.child('tables/' + $table + '/state').val() == 'dead'"
+            },
+            // cards the player is holding, waiting to be committed
+            "dealt": {
+              ".read": "auth.id != null && root.child('tables/' + $table + '/spots/' + $spot + '/user').val() == auth.id"
+            },
+            // setting of the player's cards waiting to be approved by the backend
+            "pending_committed": {
+              ".read": false,
+              ".write": "
+                // no overwriting
+                !data.exists() &&
+                  // in playing state
+                  root.child('tables/' + $table + '/state').val() == 'playing' &&
+                // spot is on turn or there is no turn
+                (!root.child('tables/' + $table + '/turn').exists() || root.child('tables/' + $table + '/turn').val() + '' == $spot)
+              ",
+              "$item": {
+                "hand": {
+                  ".validate": "!data.exists() && newData.val() % 1 == 0 && newData.val() >= 0 && newData.val() <= 2"
+                },
+                "card": {
+                  ".validate": "!data.exists() && newData.val() % 1 == 0 && newData.val() >= 1 && newData.val() <= 52"
+                },
+                "$other": {
+                  ".write": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
