@@ -166,6 +166,18 @@ describe('Table', function() {
             expect(spot.committed).to.be.ok()
         })
 
+        it('aborts when pending_committed is null (concurrency)', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [1, 2, 3, 4, 5],
+                    pending_committed: null
+                }]
+            }
+            , result = table.processSpotPendingCommitted(0, current)
+            expect(result).to.be(undefined)
+        })
+
         it('adds to existing hand', function() {
             var table = new Table()
             , current = {
