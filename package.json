@@ -3,16 +3,20 @@
     "version": "0.0.1",
     "dependencies": {
         "debug": "0.7.2",
-        "sassets": "1.0.3",
         "underscore": "1.4.4",
         "faye-websocket": "0.4.4",
         "firebase-token-generator": "0.1.2",
-        "async": "0.2.5",
         "ofcp": "0.0.6",
+    },
+    "devDependencies": {
+        "mocha": "1.8.1",
+        "expect.js": "0.2.0",
+        "sassets": "1.0.3",
+        "less": "x",
         "jake": "0.5.8",
         "aws2js": "0.8.1",
         "shelljs": "0.1.2",
-        "less": "x"
+        "async": "0.2.5"
     },
     "scripts": {
         "test": "mocha",
@@ -21,10 +25,6 @@
         "web": "node ./bin/web"
     },
     "main": "./bin/index",
-    "devDependencies": {
-        "mocha": "1.8.1",
-        "expect.js": "0.2.0"
-    },
     "engines": {
         "node": "0.8.x",
         "npm": "1.2.x"
