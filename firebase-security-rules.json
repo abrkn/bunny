@@ -80,10 +80,10 @@
               ".write": "
                 // no overwriting
                 !data.exists() &&
-                  // in playing state
-                  root.child('tables/' + $table + '/state').val() == 'playing' &&
-                // spot is on turn or there is no turn
-                (!root.child('tables/' + $table + '/turn').exists() || root.child('tables/' + $table + '/turn').val() + '' == $spot)
+                // has been dealt cards
+                root.child('tables/' + $table + '/spots/' + $spot + '/dealt').exists() &&
+                // has not committed already
+                !root.child('tables/' + $table + '/spots/' + $spot + '/committed').exists()
               ",
               "$item": {
                 "hand": {
