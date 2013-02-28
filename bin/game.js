@@ -1,12 +1,15 @@
-var Firebase = require('../vendor/firebase-node.js')
+var debug = require('debug')('bunny:game')
+, Firebase = require('../vendor/firebase-node.js')
 , FirebaseTokenGenerator = require('firebase-token-generator')
-, ref = new Firebase('https://bunny.firebaseio.com')
 , Table = require('../lib/server/Table')
 , config = require('../config')
-, debug = require('debug')('bunny:game')
+, ref = new Firebase(config.firebase.url)
+, generator = new FirebaseTokenGenerator(config.firebase.secret)
+, token = generator.createToken(null, { admin: true, debug: false })
+
 debug('authenticating with firebase')
 
-ref.auth(config.firebase.token, function(error, response) {
+ref.auth(token, function(error, response) {
     if (error) throw error
     debug('authenticated with firebase')
     debug('setting up table #0')
