@@ -11,3 +11,8 @@ dependencies
 - [Firebase](https://firebase.com) for storage
 - node.js for game flow
 - [browserified](https://github.com/substack/node-browserify) javascript and jQuery for gameplay
+
+credits
+----
+
+- svg cards from [Tek Eye](http://tekeye.biz)
