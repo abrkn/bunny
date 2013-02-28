@@ -48,6 +48,18 @@ describe('Table', function() {
             expect(result.spots[1].dealt.length).to.be(5)
             expect(result.game).to.be(1)
             expect(result.button).to.be.a('number')
+            clearTimeout(table.turnTimer)
+        })
+
+        it('deals cards if the deck has is not set', function() {
+            var table = new Table()
+            , current = {
+                state: 'playing',
+                spots: [{}, {}]
+            }
+            , result = table.processPlayingState(current)
+            expect(table.turnTimer).to.be.ok()
+            clearTimeout(table.turnTimer)
         })
 
         it('shuffles cards randomly', function() {
@@ -230,6 +242,21 @@ describe('Table', function() {
             expect(result.spots[0].hands[1][0]).to.be(20)
         })
 
+        it('places cards in new hands', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    committed: [
+                        { card: 15, hand: 0 },
+                        { card: 20, hand: 1 }
+                    ]
+                }]
+            }
+            table.turnTimer = 1
+            table.processSpotCommitted(0, current)
+            expect(table.turnTimer).to.not.be.ok()
+        })
+
         it('places cards in existing hands', function() {
             var table = new Table()
             , current = {
@@ -271,6 +298,59 @@ describe('Table', function() {
             }
             , result = table.processSpotHands(0, current)
             expect(result.state).to.be('finished')
+        })
+    })
+
+    describe('processTurnTimeout', function() {
+        it('aborts if turn timer is null', function() {
+            var table = new Table()
+            , result = table.processTurnTimeout()
+            expect(result).to.be(undefined)
+        })
+
+        it('makes a pending_committed', function() {
+            var table = new Table()
+            , current = {
+                spots: [{
+                    dealt: [1, 2, 3, 4, 5, 6]
+                }]
+            }
+            table.turnTimer = 1
+            var result = table.processTurnTimeout(current)
+            expect(result.spots[0].pending_committed).to.eql([
+                { hand: 0, card: 1 },
+                { hand: 0, card: 2 },
+                { hand: 0, card: 3 },
+                { hand: 0, card: 4 },
+                { hand: 0, card: 5 },
+                { hand: 1, card: 6 }
+            ])
+        })
+
+        it('removes the timer reference', function() {
+            var table = new Table()
+            , current = {
+                spots: []
+            }
+            table.turnTimer = 1
+            table.processTurnTimeout(current)
+            expect(current.turnTimer).to.not.be.ok()
+        })
+    })
+
+    describe('processTurn', function() {
+        it('starts the turn timer', function() {
+            var table = new Table()
+            , current = {
+                deck: [1],
+                turn: 0,
+                spots: [{
+                }]
+            }
+            var result = table.processTurn(current)
+            expect(result).to.be.ok()
+            expect(table.turnTimer).to.be.ok()
+            clearTimeout(table.turnTimer)
         })
     })
 })
