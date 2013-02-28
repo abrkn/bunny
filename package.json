@@ -11,7 +11,10 @@
         "ofcp": "git://github.com/abrkn/ofcp.git"
     },
     "scripts": {
-        "test": "mocha"
+        "test": "mocha",
+        "start": "node ./bin",
+        "game": "node ./bin/game.js",
+        "web": "node ./bin/web"
     },
     "main": "./bin/index",
     "devDependencies": {
