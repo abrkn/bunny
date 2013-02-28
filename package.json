@@ -10,6 +10,9 @@
         "async": "0.2.5",
         "ofcp": "https://github.com/abrkn/ofcp/tarball/master"
     },
+    "scripts": {
+        "test": "mocha"
+    },
     "main": "./bin/index",
     "devDependencies": {
         "mocha": "1.8.1",
