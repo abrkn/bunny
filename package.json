@@ -10,7 +10,7 @@
         "async": "0.2.5",
         "ofcp": "https://github.com/abrkn/ofcp/tarball/master"
     },
-    "main": "./bin/inded",
+    "main": "./bin/index",
     "devDependencies": {
         "mocha": "1.8.1",
         "expect.js": "0.2.0"
