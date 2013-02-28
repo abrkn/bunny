@@ -75,6 +75,7 @@ describe('Table', function() {
             , result1 = table.processPlayingState(current1)
             , result2 = table.processPlayingState(current2)
             expect(result1.deck).to.not.eql(result2.deck)
+            clearTimeout(table.turnTimer)
         })
     })
 
