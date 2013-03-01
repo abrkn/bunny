@@ -300,6 +300,22 @@ describe('Table', function() {
             , result = table.processSpotHands(0, current)
             expect(result.state).to.be('finished')
         })
+
+        it('aborts if state is finished', function() {
+            var table = new Table()
+            , current = {
+                state: 'finished',
+                spots: [{
+                    hands: [
+                        [1, 2, 3, 4, 5],
+                        [6, 7, 8, 9, 10],
+                        [11, 12, 13]
+                    ]
+                }]
+            }
+            , result = table.processSpotHands(0, current)
+            expect(result).to.be(undefined)
+        })
     })
 
     describe('processTurnTimeout', function() {
