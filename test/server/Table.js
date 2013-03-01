@@ -13,7 +13,7 @@ describe('Table', function() {
             expect(result).to.be(undefined)
         })
 
-        it('starts game when full', function() {
+        it('starts play timer when full', function() {
             var table = new Table()
             , current = {
                 state: 'dead',
@@ -21,7 +21,9 @@ describe('Table', function() {
                 spots: [{ user: "2" }, { user: "3" }]
             }
             , result = table.processSpotUser(0, current)
-            expect(result.state).to.be('playing')
+            expect(result).to.be.ok()
+            expect(table.startPlayingTimer).to.be.ok()
+            clearTimeout(table.startPlayingTimer)
         })
     })
 
@@ -36,45 +38,29 @@ describe('Table', function() {
             expect(result).to.be(undefined)
         })
 
-        it('deals cards if the deck has is not set', function() {
+        it('starts play timer if the deck has is not set', function() {
             var table = new Table()
             , current = {
                 state: 'playing',
-                spots: [{}, {}]
+                spots: [{}, {}],
+                hash: 'abc',
+                hush: '123'
             }
             , result = table.processPlayingState(current)
-            expect(result.deck.length).to.be(52 - 5 * 2)
-            expect(result.spots[0].dealt.length).to.be(5)
-            expect(result.spots[1].dealt.length).to.be(5)
-            expect(result.game).to.be(1)
-            expect(result.button).to.be.a('number')
-            clearTimeout(table.turnTimer)
+            expect(result).to.be.ok()
+            clearTimeout(table.startPlayingTimer)
         })
 
-        it('deals cards if the deck has is not set', function() {
+        it('deals cards if the deck is not set', function() {
             var table = new Table()
             , current = {
                 state: 'playing',
-                spots: [{}, {}]
+                spots: [{}, {}],
+                hash: 'abc',
+                hush: '123'
             }
             , result = table.processPlayingState(current)
             expect(table.turnTimer).to.be.ok()
-            clearTimeout(table.turnTimer)
-        })
-
-        it('shuffles cards randomly', function() {
-            var table = new Table()
-            , current1 = {
-                state: 'playing',
-                spots: [{}, {}]
-            }
-            , current2 = {
-                state: 'playing',
-                spots: [{}, {}]
-            }
-            , result1 = table.processPlayingState(current1)
-            , result2 = table.processPlayingState(current2)
-            expect(result1.deck).to.not.eql(result2.deck)
             clearTimeout(table.turnTimer)
         })
     })

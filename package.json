@@ -6,7 +6,9 @@
         "underscore": "1.4.4",
         "faye-websocket": "0.4.4",
         "firebase-token-generator": "0.1.2",
-        "ofcp": "0.0.6"
+        "ofcp": "0.0.6",
+        "chancejs": "0.0.8",
+        "crypto-browserify": "0.2.1"
     },
     "devDependencies": {
         "mocha": "1.8.1",
