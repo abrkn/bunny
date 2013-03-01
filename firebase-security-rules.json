@@ -27,6 +27,19 @@
         // cards that have not been dealt
         "deck": {
         },
+        "chat": {
+          ".read": true,
+          "$item": {
+            ".write": "auth.id != null",
+            ".validate": "newData.hasChildren(['sender', 'message'])",
+            "sender": {
+              ".validate": "newData.exists() && newData.val() == auth.id"
+            },
+            "message": {
+              ".validate": "newData.isString()"
+            }
+          }
+        },
         "spots": {
           "$spot": {
             // face up hands
