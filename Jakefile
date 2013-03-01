@@ -18,18 +18,21 @@ task('test', function() {
 })
 
 task('upgrade-firebase', function() {
-    pushd('vendor')
-    var oldSum = exec('md5sum firebase-node.js', { silent: true })
-    , oldHash = oldSum.code == 0 ? oldSum.output : null
-    , result = exec('curl -O https://cdn.firebase.com/v0/firebase-node.js')
-    if (result.code) throw new Error('download filed: ' + result.output)
+    pushd('vendor');
 
-    var newSum = exec('md5sum firebase-node.js', { silent: true })
-    , newHash = newSum.code == 0 ? newSum.output : null
+    ['firebase.js', 'firebase-node.js'].forEach(function(fn) {
+        var oldSum = exec('md5sum ' + fn, { silent: true })
+        , oldHash = oldSum.code == 0 ? oldSum.output : null
+        , result = exec('curl -O https://cdn.firebase.com/v0/' + fn, { silent: true })
+        if (result.code) throw new Error('download failed: ' + result.output)
 
-    console.log(newHash == oldHash ?
-        'Already had the latest firebase-node.js' :
-        'Updated to new firebase-node.js')
+        var newSum = exec('md5sum ' + fn, { silent: true })
+        , newHash = newSum.code == 0 ? newSum.output : null
+
+        console.log(newHash == oldHash ?
+            'Already had the latest ' + fn :
+            'Updated to new ' + fn)
+    })
 
     popd()
 })
