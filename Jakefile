@@ -17,6 +17,23 @@ task('test', function() {
     runner.on('fail', fail)
 })
 
+task('upgrade-firebase', function() {
+    pushd('vendor')
+    var oldSum = exec('md5sum firebase-node.js', { silent: true })
+    , oldHash = oldSum.code == 0 ? oldSum.output : null
+    , result = exec('curl -O https://cdn.firebase.com/v0/firebase-node.js')
+    if (result.code) throw new Error('download filed: ' + result.output)
+
+    var newSum = exec('md5sum firebase-node.js', { silent: true })
+    , newHash = newSum.code == 0 ? newSum.output : null
+
+    console.log(newHash == oldHash ?
+        'Already had the latest firebase-node.js' :
+        'Updated to new firebase-node.js')
+
+    popd()
+})
+
 task('publish', ['publish-s3', 'publish-heroku'])
 
 task('publish-heroku', function() {
