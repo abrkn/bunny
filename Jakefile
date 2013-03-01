@@ -21,18 +21,11 @@ task('upgrade-firebase', function() {
     pushd('vendor');
 
     ['firebase.js', 'firebase-node.js'].forEach(function(fn) {
-        var oldSum = exec('md5sum ' + fn, { silent: true })
-        , oldHash = oldSum.code == 0 ? oldSum.output : null
-        , result = exec('curl -O https://cdn.firebase.com/v0/' + fn, { silent: true })
+        var result = exec('curl -O https://cdn.firebase.com/v0/' + fn, { silent: true })
         if (result.code) throw new Error('download failed: ' + result.output)
-
-        var newSum = exec('md5sum ' + fn, { silent: true })
-        , newHash = newSum.code == 0 ? newSum.output : null
-
-        console.log(newHash == oldHash ?
-            'Already had the latest ' + fn :
-            'Updated to new ' + fn)
     })
+
+    exec('git status firebase*')
 
     popd()
 })
